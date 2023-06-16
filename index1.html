@@ -1,0 +1,293 @@
+<html>
+<head>
+<title>수련</title>
+</head>
+<body>
+<input type="file" name="file">
+<div>Teachable Machine Image Model</div>
+<button type="button" onclick="init()">Start</button>
+<div id="webcam-container"></div>
+<div id="label-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+    // the link to your model provided by Teachable Machine export panel
+    const URL = "./my_model/";
+	
+    let model, webcam, labelContainer, maxPredictions;
+
+    // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        // Convenience function to setup a webcam
+       
+
+        // append elements to the DOM
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+	
+    async function loop() {
+       
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+	
+	// run the uploaded image through the image model
+	async function predict(file) {
+    // Load the image file and convert it to a tensor
+    const img = await tf.browser.fromPixels(file);
+    const imgTensor = tf.image.resizeBilinear(img, [200, 200]).toFloat().expandDims();
+
+    // Normalize the image
+    const normalizedImg = imgTensor.div(255.0);
+
+    // Make predictions on the image
+    const prediction = await model.predict(normalizedImg);
+
+    // Display the prediction results
+		if(prediction[0].className== "Blue Water Lilies 1916-1919" && prediction[0].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Blue Water Lilies 1916-1919" 
+		} 
+		else if (prediction[1].className== "Bridge over the Lily Pond 1899" && prediction[1].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Bridge over the Lily Pond 1899" 
+		} 
+		else if (prediction[2].className== "Japanese Footbridge 1899" && prediction[2].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Japanese Footbridge 1899" 
+		} 
+		else if (prediction[3].className== "Lily Pond 1904" && prediction[3].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Lily Pond 1904" 
+		}
+		else if (prediction[4].className== "Lily Pond 1904 (2)" && prediction[4].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Lily Pond 1904" 
+		}
+		else if (prediction[5].className== "Lily Pond, the Bridge 1905" && prediction[5].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Lily Pond, the Bridge 1905" 
+		}
+		else if (prediction[6].className== "Nymphéas en fleur 1914-1917" && prediction[6].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Nymphéas en fleur 1914-1917" 
+		}
+		else if (prediction[7].className== "The Bridge over the Water-Lily Pond 1905" && prediction[7].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Bridge over the Water-Lily Pond 1905" 
+		}
+		else if (prediction[8].className== "The Japanese Bridge or The Lily Pond 1900" && prediction[8].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Japanese Bridge or The Lily Pond 1900" 
+		}
+		else if (prediction[9].className== "The Water-Lily Pond (left panel) 1917-1919 (2" && prediction[9].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Water-Lily Pond (left panel) 1917-1919" 
+		}
+		else if (prediction[10].className== "The Water-Lily Pond (right panel) 1917-1919 (3" && prediction[10].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Water-Lily Pond (right panel) 1917-1919" 
+		}
+		else if (prediction[11].className== "The Water-Lily Pond 1917-1919 (1" && prediction[11].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Water-Lily Pond 1917-1919" 
+		}
+		else if (prediction[12].className== "The Water-Lily Pond 1917-1919 (5" && prediction[12].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Water-Lily Pond 1917-1919" 
+		}
+		else if (prediction[13].className== "The Water-Lily Pond 1917-1919" && prediction[13].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Water-Lily Pond 1917-1919" 
+		}
+		else if (prediction[14].className== "The Water-Lily Pond 1917-1920" && prediction[14].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Water-Lily Pond 1917-1920" 
+		}
+		else if (prediction[15].className== "The Water-Lily Pond 1918-1919" && prediction[15].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "The Water-Lily Pond 1918-1919" 
+		}
+		else if (prediction[16].className== "Vue du bassin aux nymphéas avec saule 1916-1919 (4" && prediction[16].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Vue du bassin aux nymphéas avec saule 1916-1919" 
+		}
+		else if (prediction[17].className== "Water Lilies 1903" && prediction[17].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1903" 
+		}
+		else if (prediction[18].className== "Water Lilies 1904" && prediction[18].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1904" 
+		}
+		else if (prediction[19].className== "Water Lilies 1906" && prediction[19].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1906" 
+		}
+		else if (prediction[20].className== "Water Lilies 1906-1907 (2)" && prediction[20].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1906-1907" 
+		}
+		else if (prediction[21].className== "Water Lilies 1906-1907 (3)" && prediction[21].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1906-1907" 
+		}
+		else if (prediction[22].className== "Water Lilies 1906-1907" && prediction[22].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1906-1907" 
+		}
+		else if (prediction[23].className== "Water Lilies 1907 (2)9" && prediction[23].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907 (2)" 
+		}
+		else if (prediction[24].className== "Water Lilies 1907 (3)9" && prediction[24].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[25].className== "Water Lilies 1907 (4)" && prediction[25].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[26].className== "Water Lilies 1907 (5)" && prediction[26].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[27].className== "Water Lilies 1907 (6)" && prediction[27].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[28].className== "Water Lilies 1907 (7)" && prediction[28].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[29].className== "Water Lilies 1907 (8" && prediction[29].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[30].className== "Water Lilies 1907 (9" && prediction[30].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[31].className== "Water Lilies 1907 (10" && prediction[31].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907 " 
+		}
+		else if (prediction[32].className== "Water Lilies 1907 (11" && prediction[32].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[33].className== "Water Lilies 1907 (12" && prediction[33].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[34].className== "Water Lilies 1907 (13" && prediction[34].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[35].className== "Water Lilies 1907 (14" && prediction[35].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[36].className== "Water Lilies 1908 (1" && prediction[36].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1908" 
+		}
+		else if (prediction[37].className== "Water Lilies 1907" && prediction[37].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1907" 
+		}
+		else if (prediction[38].className== "Water Lilies 1908 (2" && prediction[38].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1908" 
+		}
+		else if (prediction[39].className== "Water Lilies 1908 (3" && prediction[39].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1908" 
+		}
+		else if (prediction[40].className== "Water Lilies 1908 (4" && prediction[40].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1908" 
+		}
+		else if (prediction[41].className== "Water Lilies 1908" && prediction[41].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1908" 
+		}
+		else if (prediction[42].className== "Water Lilies 1914-1917 (1)" && prediction[42].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1914-1917" 
+		}
+		else if (prediction[43].className== "Water Lilies 1914-1917 (1" && prediction[43].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1914-1917" 
+		}
+		else if (prediction[44].className== "Water Lilies 1914-1917 (2)" && prediction[44].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1914-1917" 
+		}
+		else if (prediction[45].className== "Water Lilies 1914-1917 (2" && prediction[45].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1914-1917" 
+		}
+		else if (prediction[46].className== "Water Lilies 1914-1917 (4)" && prediction[46].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1914-1917" 
+		}
+		else if (prediction[47].className== "Water Lilies 1914-1917 (20" && prediction[47].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1914-1917" 
+		}
+		else if (prediction[48].className== "Water Lilies 1915" && prediction[48].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1915" 
+		}
+		else if (prediction[49].className== "Water Lilies 1916" && prediction[49].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1916" 
+		}
+		else if (prediction[50].className== "Water Lilies 1916-1919 (2" && prediction[50].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1916-1919" 
+		}
+		else if (prediction[51].className== "Water Lilies 1916-1919 (3" && prediction[51].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1916-1919" 
+		}
+		else if (prediction[52].className== "Water Lilies 1916-1919" && prediction[52].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1916-1919" 
+		}
+		else if (prediction[53].className== "Water Lilies 1917-1919 (4" && prediction[53].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies 1917-1919" 
+		}
+		else if (prediction[54].className== "Water Lilies and Japanese Bridge 1899" && prediction[54].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies and Japanese Bridge 1899" 
+		}
+		else if (prediction[55].className== "Water Lilies, Evening 1897" && prediction[55].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies, Evening 1897" 
+		}
+		else if (prediction[56].className== "Water Lilies, Green Reflection, 1914-1917" && prediction[56].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies, Green Reflection, 1914-1917" 
+		}
+		else if (prediction[57].className== "Water Lilies, Morning 1914" && prediction[57].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies, Morning 1914" 
+		}
+		else if (prediction[58].className== "Water Lilies, Reflections of a Willow Tree 1916-19" && prediction[58].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies, Reflections of a Willow Tree 1916-19" 
+		}
+		else if (prediction[59].className== "Water Lilies, Setting Sun 1907" && prediction[59].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lilies, Setting Sun 1907" 
+		}
+		else if (prediction[60].className== "Water Lily Pond 1900" && prediction[60].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lily Pond 1900" 
+		}
+		else if (prediction[61].className== "Water Lily Pond 1917-1926" && prediction[61].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water Lily Pond 1917-1926" 
+		}
+		else if (prediction[62].className== "Water-Lilies 1905 (2)" && prediction[62].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water-Lilies 1905" 
+		}
+		else if (prediction[63].className== "Water-Lilies 1905" && prediction[63].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water-Lilies 1905" 
+		}
+		else if (prediction[64].className== "Water-Lilies with Reflections of Green Grasses 191" && prediction[64].probability.toFixed(2) == 1.00) { 
+			labelContainer.childNodes[0].innerHTML= "Water-Lilies with Reflections of Green Grasses 1914-1917" 
+		}
+				
+		else { 
+			labelContainer.childNodes[0].innerHTML= "알수없음" 
+		}
+    // Continue with the remaining else-if conditions for other predictions
+    // ...
+	// Load the image model and setup the file upload event listener
+	async function init() {
+		const modelURL = URL + "model.json";
+		const metadataURL = URL + "metadata.json";
+
+		// load the model and metadata
+		model = await tmImage.load(modelURL, metadataURL);
+		maxPredictions = model.getTotalClasses();
+
+		// Add an event listener for the file upload input
+		const fileInput = document.getElementById("file-input");
+		fileInput.addEventListener("change", (event) => {
+			const file = event.target.files[0];
+			predict(file);
+		});
+
+		// Append elements to the DOM
+		labelContainer = document.getElementById("label-container");
+			for (let i = 0; i < maxPredictions; i++) {
+				labelContainer.appendChild(document.createElement("div"));
+			}
+		}
+
+
+    
+    
+</script>
+</body>
+</html>
